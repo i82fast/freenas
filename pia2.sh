@@ -41,11 +41,11 @@
     {
       echo 'Loading port forward assignment information..'
       if [ "$(uname)" == "Linux" ]; then
-        local_ip=`ifconfig tun0|grep -oE "inet addr: *10\.[0-9]+\.[0-9]+\.[0-9]+"|tr -d "a-z :"|tee /tmp/vpn_ip`
+        local_ip=`ifconfig tun1|grep -oE "inet addr: *10\.[0-9]+\.[0-9]+\.[0-9]+"|tr -d "a-z :"|tee /tmp/vpn_ip`
         client_id=`head -n 100 /dev/urandom | md5sum | tr -d " -"`
       fi
       if [ "$(uname)" == "FreeBSD" ]; then
-        local_ip=`ifconfig tun0 | grep "inet " | cut -d\  -f2|tee /tmp/vpn_ip`
+        local_ip=`ifconfig tun1 | grep "inet " | cut -d\  -f2|tee /tmp/vpn_ip`
         client_id=`head -n 100 /dev/urandom | md5 -r | tr -d " -"`
       fi
       json=`wget --no-check-certificate -q --post-data="user=$USER&pass=$PASSWORD&client_id=$client_id&local_ip=$local_ip" -O - 'https://www.privateinternetaccess.com/vpninfo/port_forward_assignment' | head -1`
